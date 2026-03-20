@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShopZone - Home</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #ff6b35;
+    --primary-dark: #e85520;
+    --secondary: #1a1a2e;
+    --accent: #ffd700;
+    --bg: #f7f7f7;
+    --white: #fff;
+    --text: #1a1a2e;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --success: #10b981;
+    --danger: #ef4444;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.14);
+    --r: 12px; --r-sm: 6px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);}
+  h1,h2,h3,h4{font-family:'Syne',sans-serif;}
+  a{text-decoration:none;color:inherit;}
+  button{cursor:pointer;border:none;font-family:inherit;}
+
+  /* NAV */
+  nav{background:var(--secondary);position:sticky;top:0;z-index:999;box-shadow:0 2px 16px rgba(0,0,0,0.3);}
+  .nav-inner{max-width:1300px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:64px;}
+  .logo{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:#fff;letter-spacing:-1px;}
+  .logo span{color:var(--primary);}
+  .nav-links{display:flex;gap:4px;}
+  .nav-links a{color:#ccc;font-size:.9rem;font-weight:600;padding:8px 14px;border-radius:var(--r-sm);transition:all .2s;}
+  .nav-links a:hover,.nav-links a.active{background:rgba(255,255,255,.1);color:#fff;}
+  .nav-links a.active{color:var(--primary);}
+  .nav-cart{position:relative;background:var(--primary);color:#fff;padding:8px 18px;border-radius:25px;font-weight:700;font-size:.9rem;display:flex;align-items:center;gap:6px;transition:all .2s;}
+  .nav-cart:hover{background:var(--primary-dark);transform:translateY(-1px);}
+  .cart-badge{background:var(--accent);color:var(--text);font-size:.72rem;font-weight:800;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;}
+
+  /* HERO */
+  .hero{background:linear-gradient(135deg,var(--secondary) 0%,#16213e 60%,#0f3460 100%);min-height:88vh;display:flex;align-items:center;justify-content:center;padding:60px 24px;position:relative;overflow:hidden;}
+  .hero::before{content:'';position:absolute;top:-80px;right:-80px;width:500px;height:500px;background:radial-gradient(circle,rgba(255,107,53,.18) 0%,transparent 70%);border-radius:50%;}
+  .hero::after{content:'";position:absolute;bottom:-100px;left:-80px;width:400px;height:400px;background:radial-gradient(circle,rgba(255,215,0,.1) 0%,transparent 70%);border-radius:50%;}
+  .hero-content{text-align:center;z-index:1;max-width:760px;}
+  .hero-badge{display:inline-block;background:rgba(255,107,53,.2);border:1px solid rgba(255,107,53,.4);color:var(--primary);font-size:.8rem;font-weight:700;padding:6px 16px;border-radius:20px;margin-bottom:20px;letter-spacing:1px;text-transform:uppercase;}
+  .hero h1{font-size:3.8rem;font-weight:800;color:#fff;line-height:1.1;margin-bottom:20px;}
+  .hero h1 span{color:var(--primary);}
+  .hero p{color:#aaa;font-size:1.1rem;max-width:520px;margin:0 auto 36px;line-height:1.7;}
+  .hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+  .btn-primary{background:var(--primary);color:#fff;padding:14px 32px;border-radius:30px;font-weight:700;font-size:1rem;transition:all .2s;display:inline-flex;align-items:center;gap:8px;}
+  .btn-primary:hover{background:var(--primary-dark);transform:translateY(-2px);box-shadow:0 8px 20px rgba(255,107,53,.4);}
+  .btn-outline{background:transparent;color:#fff;padding:14px 32px;border-radius:30px;font-weight:700;font-size:1rem;border:2px solid rgba(255,255,255,.3);transition:all .2s;}
+  .btn-outline:hover{border-color:#fff;background:rgba(255,255,255,.08);}
+  .hero-stats{display:flex;gap:40px;justify-content:center;margin-top:52px;flex-wrap:wrap;}
+  .stat{text-align:center;}
+  .stat-num{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:#fff;}
+  .stat-lbl{font-size:.78rem;color:#888;text-transform:uppercase;letter-spacing:1px;}
+
+  /* SECTION */
+  .section{padding:64px 24px;}
+  .section-header{text-align:center;margin-bottom:40px;}
+  .section-header h2{font-size:2rem;font-weight:800;margin-bottom:8px;}
+  .section-header h2 span{color:var(--primary);}
+  .section-header p{color:var(--muted);font-size:.95rem;}
+  .container{max-width:1300px;margin:0 auto;}
+
+  /* CATEGORIES */
+  .cats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;}
+  .cat-card{background:var(--white);border-radius:var(--r);padding:28px 16px;text-align:center;box-shadow:var(--shadow);transition:all .25s;cursor:pointer;border:2px solid transparent;}
+  .cat-card:hover{border-color:var(--primary);transform:translateY(-4px);box-shadow:var(--shadow-lg);}
+  .cat-card .ci{font-size:2.6rem;margin-bottom:10px;}
+  .cat-card h4{font-size:.9rem;font-weight:700;}
+  .cat-card p{font-size:.75rem;color:var(--muted);margin-top:2px;}
+
+  /* FEATURED */
+  .featured-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px;}
+  .prod-card{background:var(--white);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);transition:all .25s;position:relative;}
+  .prod-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-4px);}
+  .prod-badge{position:absolute;top:10px;left:10px;z-index:2;font-size:.7rem;font-weight:800;padding:4px 10px;border-radius:20px;letter-spacing:.5px;text-transform:uppercase;}
+  .badge-sale{background:var(--danger);color:#fff;}
+  .badge-new{background:var(--success);color:#fff;}
+  .badge-hot{background:var(--accent);color:var(--text);}
+  .prod-img{height:180px;display:flex;align-items:center;justify-content:center;font-size:5rem;background:linear-gradient(135deg,#f8f9fa,#e9ecef);}
+  .prod-body{padding:14px;}
+  .prod-cat{font-size:.72rem;text-transform:uppercase;letter-spacing:1px;color:var(--primary);font-weight:700;margin-bottom:2px;}
+  .prod-name{font-size:.92rem;font-weight:700;line-height:1.3;margin-bottom:6px;}
+  .stars{display:flex;align-items:center;gap:3px;margin-bottom:8px;}
+  .stars .s{color:#ffc107;font-size:.85rem;}
+  .stars .rv{font-size:.75rem;color:var(--muted);}
+  .prod-price{display:flex;align-items:baseline;gap:8px;margin-bottom:10px;}
+  .price-now{font-size:1.15rem;font-weight:800;font-family:'Syne',sans-serif;}
+  .price-old{font-size:.8rem;color:var(--muted);text-decoration:line-through;}
+  .price-pct{font-size:.76rem;color:var(--success);font-weight:700;}
+  .btn-cart{width:100%;background:var(--primary);color:#fff;font-weight:700;padding:9px;border-radius:var(--r-sm);font-size:.85rem;transition:all .2s;}
+  .btn-cart:hover{background:var(--primary-dark);}
+  .btn-cart.added{background:var(--success);}
+  .view-all-wrap{text-align:center;margin-top:32px;}
+
+  /* BANNER STRIP */
+  .banner-strip{background:linear-gradient(90deg,var(--primary) 0%,#ff9f1c 100%);padding:48px 24px;}
+  .banner-inner{max-width:1300px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;}
+  .banner-text h2{font-size:2rem;color:#fff;font-weight:800;margin-bottom:6px;}
+  .banner-text p{color:rgba(255,255,255,.85);}
+  .btn-white{background:#fff;color:var(--primary);padding:12px 28px;border-radius:25px;font-weight:700;font-size:.95rem;transition:all .2s;}
+  .btn-white:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.15);}
+
+  /* FEATURES */
+  .features-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;}
+  .feat-card{background:var(--white);border-radius:var(--r);padding:28px 20px;box-shadow:var(--shadow);text-align:center;}
+  .feat-card .fi{font-size:2.4rem;margin-bottom:12px;}
+  .feat-card h4{font-size:1rem;font-weight:700;margin-bottom:6px;}
+  .feat-card p{font-size:.82rem;color:var(--muted);line-height:1.6;}
+
+  /* TESTIMONIALS */
+  .testi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;}
+  .testi-card{background:var(--white);border-radius:var(--r);padding:24px;box-shadow:var(--shadow);}
+  .testi-stars{color:#ffc107;font-size:1rem;margin-bottom:10px;}
+  .testi-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:14px;font-style:italic;}
+  .testi-author{display:flex;align-items:center;gap:10px;}
+  .testi-av{width:38px;height:38px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
+  .testi-name{font-weight:700;font-size:.88rem;}
+  .testi-loc{font-size:.75rem;color:var(--muted);}
+
+  /* TOAST */
+  #toast{position:fixed;bottom:24px;right:24px;background:var(--secondary);color:#fff;padding:14px 22px;border-radius:var(--r);font-size:.9rem;font-weight:600;box-shadow:var(--shadow-lg);z-index:9999;transform:translateY(80px);opacity:0;transition:all .3s;border-left:4px solid var(--primary);}
+  #toast.show{transform:translateY(0);opacity:1;}
+
+  footer{background:var(--secondary);color:#aaa;text-align:center;padding:24px;margin-top:0;font-size:.85rem;}
+  footer strong{color:var(--primary);}
+
+  @media(max-width:700px){
+    .hero h1{font-size:2.2rem;}
+    .hero-stats{gap:24px;}
+    .nav-links a:not(.active){display:none;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo">Shop<span>Zone</span></div>
+    <div class="nav-links">
+      <a href="home.html" class="active">Home</a>
+      <a href="index.html">Products</a>
+      <a href="cart.html">Cart</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <a href="cart.html" class="nav-cart">🛒 Cart <span class="cart-badge" id="cartBadge">0</span></a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">🔥 New Arrivals Every Day</div>
+    <h1>Shop Smart,<br>Live <span>Better</span></h1>
+    <p>Discover thousands of products across all categories at unbeatable prices. Fast delivery, easy returns, and 24/7 support.</p>
+    <div class="hero-btns">
+      <a href="index.html" class="btn-primary">🛍️ Shop Now</a>
+      <a href="contact.html" class="btn-outline">Learn More</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">50K+</div><div class="stat-lbl">Products</div></div>
+      <div class="stat"><div class="stat-num">2M+</div><div class="stat-lbl">Happy Customers</div></div>
+      <div class="stat"><div class="stat-num">100+</div><div class="stat-lbl">Brands</div></div>
+      <div class="stat"><div class="stat-num">4.8★</div><div class="stat-lbl">Average Rating</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="section" style="background:var(--white);">
+  <div class="container">
+    <div class="section-header">
+      <h2>Shop by <span>Category</span></h2>
+      <p>Find exactly what you need across our wide range of categories</p>
+    </div>
+    <div class="cats-grid">
+      <a href="index.html" onclick="localStorage.setItem('sz_filter','Electronics')" class="cat-card">
+        <div class="ci">📱</div><h4>Electronics</h4><p>1,200+ items</p>
+      </a>
+      <a href="index.html" onclick="localStorage.setItem('sz_filter','Fashion')" class="cat-card">
+        <div class="ci">👗</div><h4>Fashion</h4><p>3,400+ items</p>
+      </a>
+      <a href="index.html" onclick="localStorage.setItem('sz_filter','Home')" class="cat-card">
+        <div class="ci">🏠</div><h4>Home & Living</h4><p>890+ items</p>
+      </a>
+      <a href="index.html" onclick="localStorage.setItem('sz_filter','Sports')" class="cat-card">
+        <div class="ci">🏋️</div><h4>Sports</h4><p>640+ items</p>
+      </a>
+      <a href="index.html" onclick="localStorage.setItem('sz_filter','Books')" class="cat-card">
+        <div class="ci">📚</div><h4>Books</h4><p>5,000+ items</p>
+      </a>
+      <a href="index.html" onclick="localStorage.setItem('sz_filter','Beauty')" class="cat-card">
+        <div class="ci">💄</div><h4>Beauty</h4><p>720+ items</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED PRODUCTS -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2>🔥 <span>Featured</span> Products</h2>
+      <p>Hand-picked deals you won't want to miss</p>
+    </div>
+    <div class="featured-grid" id="featuredGrid"></div>
+    <div class="view-all-wrap">
+      <a href="index.html" class="btn-primary" style="display:inline-flex;">View All Products →</a>
+    </div>
+  </div>
+</section>
+
+<!-- BANNER -->
+<div class="banner-strip">
+  <div class="banner-inner">
+    <div class="banner-text">
+      <h2>⚡ Flash Sale — Up to 70% Off!</h2>
+      <p>Limited time offer on Electronics, Fashion & more. Don't miss out!</p>
+    </div>
+    <a href="index.html" class="btn-white">Shop the Sale →</a>
+  </div>
+</div>
+
+<!-- WHY SHOPZONE -->
+<section class="section" style="background:var(--white);">
+  <div class="container">
+    <div class="section-header">
+      <h2>Why Choose <span>ShopZone</span>?</h2>
+      <p>We make shopping easier, faster, and more rewarding</p>
+    </div>
+    <div class="features-grid">
+      <div class="feat-card"><div class="fi">🚀</div><h4>Fast Delivery</h4><p>Get your orders delivered within 2-3 business days across India.</p></div>
+      <div class="feat-card"><div class="fi">🔒</div><h4>Secure Payments</h4><p>100% safe checkout with UPI, cards, net banking & wallets.</p></div>
+      <div class="feat-card"><div class="fi">🔄</div><h4>Easy Returns</h4><p>Hassle-free 30-day return and exchange policy on all products.</p></div>
+      <div class="feat-card"><div class="fi">🎧</div><h4>24/7 Support</h4><p>Our customer care team is always ready to help you out.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2>What Our <span>Customers</span> Say</h2>
+      <p>Trusted by millions of happy shoppers across India</p>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Amazing shopping experience! Got my Sony headphones in just 2 days and the quality is outstanding. Highly recommend!"</p>
+        <div class="testi-author"><div class="testi-av">👤</div><div><div class="testi-name">Arjun Sharma</div><div class="testi-loc">Mumbai</div></div></div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Prices are unbeatable and returns are so easy. I've been shopping here for 2 years and never had an issue!"</p>
+        <div class="testi-author"><div class="testi-av">👤</div><div><div class="testi-name">Priya Nair</div><div class="testi-loc">Bangalore</div></div></div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★☆</div>
+        <p class="testi-text">"Great variety of products and the app is super smooth. Customer support resolved my query within minutes!"</p>
+        <div class="testi-author"><div class="testi-av">👤</div><div><div class="testi-name">Rahul Verma</div><div class="testi-loc">Delhi</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer><strong>ShopZone</strong> &copy; 2025 — All rights reserved.</footer>
+<div id="toast">✅ Added to cart!</div>
+
+<script>
+const FEATURED = [
+  {id:1,name:"Sony WH-1000XM5 Headphones",cat:"Electronics",emoji:"🎧",price:24999,original:34999,rating:4.8,reviews:3241,badge:"sale"},
+  {id:2,name:"Apple Watch Series 9",cat:"Electronics",emoji:"⌚",price:41999,original:45000,rating:4.9,reviews:1823,badge:"hot"},
+  {id:7,name:"Running Shoes Pro X3",cat:"Sports",emoji:"👟",price:7499,original:9999,rating:4.6,reviews:1203,badge:"sale"},
+  {id:11,name:"Atomic Habits",cat:"Books",emoji:"📗",price:399,original:699,rating:4.9,reviews:12840,badge:"hot"},
+];
+
+let cart = JSON.parse(localStorage.getItem('sz_cart') || '[]');
+function saveCart(){ localStorage.setItem('sz_cart', JSON.stringify(cart)); updateBadge(); }
+function updateBadge(){ document.getElementById('cartBadge').textContent = cart.reduce((s,i)=>s+i.qty,0); }
+
+function stars(r){
+  let s='';for(let i=1;i<=5;i++)s+=`<span class="s">${i<=Math.floor(r)?'★':'☆'}</span>`;
+  return s;
+}
+
+function renderFeatured(){
+  document.getElementById('featuredGrid').innerHTML = FEATURED.map(p=>{
+    const disc = Math.round((1-p.price/p.original)*100);
+    const inCart = cart.find(c=>c.id===p.id);
+    return `
+    <div class="prod-card">
+      ${p.badge?`<span class="prod-badge badge-${p.badge}">${p.badge==='sale'?`-${disc}%`:p.badge}</span>`:''}
+      <div class="prod-img">${p.emoji}</div>
+      <div class="prod-body">
+        <div class="prod-cat">${p.cat}</div>
+        <div class="prod-name">${p.name}</div>
+        <div class="stars">${stars(p.rating)}<span class="rv">(${p.reviews.toLocaleString()})</span></div>
+        <div class="prod-price">
+          <span class="price-now">₹${p.price.toLocaleString()}</span>
+          <span class="price-old">₹${p.original.toLocaleString()}</span>
+          <span class="price-pct">${disc}% off</span>
+        </div>
+        <button class="btn-cart ${inCart?'added':''}" id="hbtn-${p.id}" onclick="addToCart(${p.id})">
+          ${inCart?'✅ Added':'🛒 Add to Cart'}
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function addToCart(id){
+  const p = FEATURED.find(x=>x.id===id);
+  if(!p) return;
+  const existing = cart.find(c=>c.id===id);
+  if(existing) existing.qty++;
+  else cart.push({...p, qty:1});
+  saveCart();
+  const btn = document.getElementById(`hbtn-${id}`);
+  if(btn){ btn.classList.add('added'); btn.textContent='✅ Added'; }
+  showToast(`${p.emoji} Added to cart!`);
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2800);
+}
+
+updateBadge(); renderFeatured();
+</script>
+</body>
+</html>
