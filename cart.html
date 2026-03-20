@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShopZone - Cart</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #ff6b35;
+    --primary-dark: #e85520;
+    --secondary: #1a1a2e;
+    --accent: #ffd700;
+    --bg: #f7f7f7;
+    --white: #fff;
+    --text: #1a1a2e;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --success: #10b981;
+    --danger: #ef4444;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.14);
+    --r: 12px; --r-sm: 6px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);}
+  h1,h2,h3,h4{font-family:'Syne',sans-serif;}
+  a{text-decoration:none;color:inherit;}
+  button{cursor:pointer;border:none;font-family:inherit;}
+
+  nav{background:var(--secondary);position:sticky;top:0;z-index:999;box-shadow:0 2px 16px rgba(0,0,0,0.3);}
+  .nav-inner{max-width:1300px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:64px;}
+  .logo{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:#fff;letter-spacing:-1px;}
+  .logo span{color:var(--primary);}
+  .nav-links{display:flex;gap:4px;}
+  .nav-links a{color:#ccc;font-size:.9rem;font-weight:600;padding:8px 14px;border-radius:var(--r-sm);transition:all .2s;}
+  .nav-links a:hover,.nav-links a.active{background:rgba(255,255,255,.1);color:#fff;}
+  .nav-links a.active{color:var(--primary);}
+  .nav-cart{position:relative;background:var(--primary);color:#fff;padding:8px 18px;border-radius:25px;font-weight:700;font-size:.9rem;display:flex;align-items:center;gap:6px;transition:all .2s;}
+  .nav-cart:hover{background:var(--primary-dark);transform:translateY(-1px);}
+  .cart-badge{background:var(--accent);color:var(--text);font-size:.72rem;font-weight:800;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;}
+
+  .page-header{background:linear-gradient(135deg,var(--secondary) 0%,#16213e 60%,#0f3460 100%);padding:40px 24px;text-align:center;}
+  .page-header h1{font-size:2.4rem;color:#fff;font-weight:800;margin-bottom:6px;}
+  .page-header h1 span{color:var(--primary);}
+  .page-header p{color:#aaa;font-size:.95rem;}
+
+  .main{max-width:1300px;margin:40px auto;padding:0 24px;}
+  .cart-layout{display:grid;grid-template-columns:1fr 360px;gap:28px;align-items:start;}
+
+  /* CART ITEMS */
+  .cart-items{background:var(--white);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;}
+  .cart-items-header{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+  .cart-items-header h2{font-size:1.15rem;}
+  .clear-btn{background:none;color:var(--danger);font-size:.82rem;font-weight:700;padding:6px 12px;border-radius:var(--r-sm);border:1px solid var(--danger);transition:all .2s;}
+  .clear-btn:hover{background:var(--danger);color:#fff;}
+
+  .cart-item{display:flex;align-items:center;gap:16px;padding:18px 24px;border-bottom:1px solid var(--border);transition:background .15s;}
+  .cart-item:last-child{border-bottom:none;}
+  .cart-item:hover{background:#fafafa;}
+  .item-emoji{font-size:2.8rem;background:linear-gradient(135deg,#f8f9fa,#e9ecef);border-radius:var(--r-sm);width:72px;height:72px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .item-info{flex:1;min-width:0;}
+  .item-cat{font-size:.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--primary);font-weight:700;}
+  .item-name{font-size:.92rem;font-weight:700;line-height:1.35;margin:2px 0 4px;}
+  .item-brand{font-size:.76rem;color:var(--muted);}
+  .item-unit-price{font-size:.8rem;color:var(--muted);margin-top:4px;}
+  .item-controls{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+  .qty-btn{width:30px;height:30px;border-radius:50%;background:var(--bg);border:2px solid var(--border);font-size:1rem;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+  .qty-btn:hover{border-color:var(--primary);background:var(--primary);color:#fff;}
+  .qty-val{font-size:.95rem;font-weight:700;min-width:24px;text-align:center;}
+  .item-price{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:800;min-width:90px;text-align:right;flex-shrink:0;}
+  .remove-btn{background:none;color:var(--muted);font-size:1.1rem;padding:4px;border-radius:4px;transition:all .2s;flex-shrink:0;}
+  .remove-btn:hover{color:var(--danger);background:rgba(239,68,68,.1);}
+
+  /* ORDER SUMMARY */
+  .order-summary{background:var(--white);border-radius:var(--r);box-shadow:var(--shadow);padding:24px;position:sticky;top:88px;}
+  .order-summary h2{font-size:1.15rem;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+  .summary-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-size:.9rem;}
+  .summary-row .label{color:var(--muted);}
+  .summary-row .value{font-weight:600;}
+  .summary-row.discount .value{color:var(--success);}
+  .summary-divider{border:none;border-top:2px dashed var(--border);margin:16px 0;}
+  .summary-total{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+  .summary-total .label{font-size:1rem;font-weight:700;}
+  .summary-total .value{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:var(--primary);}
+  .coupon-box{display:flex;gap:8px;margin-bottom:20px;}
+  .coupon-box input{flex:1;padding:10px 14px;border:2px solid var(--border);border-radius:var(--r-sm);font-family:inherit;font-size:.85rem;outline:none;transition:border-color .2s;}
+  .coupon-box input:focus{border-color:var(--primary);}
+  .coupon-apply{background:var(--secondary);color:#fff;padding:10px 16px;border-radius:var(--r-sm);font-weight:700;font-size:.82rem;transition:all .2s;}
+  .coupon-apply:hover{background:#0f3460;}
+  .checkout-btn{width:100%;background:var(--primary);color:#fff;padding:14px;border-radius:30px;font-weight:800;font-size:1rem;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+  .checkout-btn:hover{background:var(--primary-dark);transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,107,53,.35);}
+  .continue-btn{width:100%;background:transparent;color:var(--primary);padding:12px;border-radius:30px;font-weight:700;font-size:.9rem;border:2px solid var(--primary);margin-top:10px;transition:all .2s;}
+  .continue-btn:hover{background:var(--primary);color:#fff;}
+  .safe-pay{text-align:center;font-size:.75rem;color:var(--muted);margin-top:12px;display:flex;align-items:center;justify-content:center;gap:4px;}
+
+  /* EMPTY CART */
+  .empty-cart{text-align:center;padding:80px 20px;}
+  .empty-cart .ei{font-size:5rem;margin-bottom:16px;}
+  .empty-cart h3{font-size:1.4rem;margin-bottom:8px;}
+  .empty-cart p{color:var(--muted);margin-bottom:24px;}
+  .btn-shop{display:inline-block;background:var(--primary);color:#fff;padding:12px 28px;border-radius:25px;font-weight:700;font-size:.95rem;transition:all .2s;}
+  .btn-shop:hover{background:var(--primary-dark);transform:translateY(-2px);}
+
+  /* TOAST */
+  #toast{position:fixed;bottom:24px;right:24px;background:var(--secondary);color:#fff;padding:14px 22px;border-radius:var(--r);font-size:.9rem;font-weight:600;box-shadow:var(--shadow-lg);z-index:9999;transform:translateY(80px);opacity:0;transition:all .3s;border-left:4px solid var(--primary);}
+  #toast.show{transform:translateY(0);opacity:1;}
+
+  /* CHECKOUT MODAL */
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s;}
+  .modal-overlay.open{opacity:1;pointer-events:all;}
+  .modal{background:var(--white);border-radius:var(--r);padding:40px 32px;max-width:460px;width:100%;text-align:center;transform:scale(.9);transition:transform .3s;}
+  .modal-overlay.open .modal{transform:scale(1);}
+  .modal .mi{font-size:4rem;margin-bottom:16px;}
+  .modal h2{font-size:1.6rem;margin-bottom:8px;}
+  .modal p{color:var(--muted);margin-bottom:24px;}
+  .modal-btn{background:var(--primary);color:#fff;padding:12px 28px;border-radius:25px;font-weight:700;font-size:.95rem;transition:all .2s;}
+  .modal-btn:hover{background:var(--primary-dark);}
+
+  footer{background:var(--secondary);color:#aaa;text-align:center;padding:24px;margin-top:40px;font-size:.85rem;}
+  footer strong{color:var(--primary);}
+
+  @media(max-width:900px){
+    .cart-layout{grid-template-columns:1fr;}
+    .order-summary{position:static;}
+  }
+  @media(max-width:600px){
+    .nav-links a:not(.active){display:none;}
+    .item-emoji{width:54px;height:54px;font-size:2rem;}
+    .item-price{font-size:.9rem;min-width:70px;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo">Shop<span>Zone</span></div>
+    <div class="nav-links">
+      <a href="home.html">Home</a>
+      <a href="index.html">Products</a>
+      <a href="cart.html" class="active">Cart</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <a href="cart.html" class="nav-cart">🛒 Cart <span class="cart-badge" id="cartBadge">0</span></a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>Your <span>Cart</span></h1>
+  <p>Review your items and proceed to checkout</p>
+</div>
+
+<div class="main" id="mainContent"></div>
+
+<!-- Checkout Success Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="mi">🎉</div>
+    <h2>Order Placed!</h2>
+    <p>Thank you for shopping with ShopZone! Your order has been confirmed and will be delivered in 2-3 business days.</p>
+    <button class="modal-btn" onclick="closeModal()">Continue Shopping</button>
+  </div>
+</div>
+
+<footer><strong>ShopZone</strong> &copy; 2025 — All rights reserved.</footer>
+<div id="toast"></div>
+
+<script>
+let cart = JSON.parse(localStorage.getItem('sz_cart') || '[]');
+
+function saveCart(){ localStorage.setItem('sz_cart', JSON.stringify(cart)); }
+function updateBadge(){ document.getElementById('cartBadge').textContent = cart.reduce((s,i)=>s+i.qty,0); }
+
+function getSubtotal(){ return cart.reduce((s,i)=>s+(i.price*i.qty),0); }
+function getOriginal(){ return cart.reduce((s,i)=>s+(i.original*i.qty),0); }
+function getSavings(){ return getOriginal()-getSubtotal(); }
+function getDelivery(){ return getSubtotal() > 999 ? 0 : 79; }
+function getTotal(){ return getSubtotal() + getDelivery(); }
+
+function changeQty(id, delta){
+  const item = cart.find(c=>c.id===id);
+  if(!item) return;
+  item.qty += delta;
+  if(item.qty <= 0) cart = cart.filter(c=>c.id!==id);
+  saveCart(); updateBadge(); render();
+}
+
+function removeItem(id){
+  cart = cart.filter(c=>c.id!==id);
+  saveCart(); updateBadge(); render();
+  showToast('🗑️ Item removed from cart');
+}
+
+function clearCart(){
+  cart = [];
+  saveCart(); updateBadge(); render();
+  showToast('🗑️ Cart cleared');
+}
+
+function applyCoupon(){
+  const val = document.getElementById('couponInput').value.trim().toUpperCase();
+  if(val === 'SAVE10') showToast('✅ Coupon applied! (Demo only)');
+  else showToast('❌ Invalid coupon code');
+}
+
+function checkout(){
+  if(!cart.length) return;
+  clearCart();
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal(){
+  document.getElementById('modalOverlay').classList.remove('open');
+  window.location.href='index.html';
+}
+
+function render(){
+  const container = document.getElementById('mainContent');
+  if(!cart.length){
+    container.innerHTML = `
+      <div class="empty-cart">
+        <div class="ei">🛒</div>
+        <h3>Your cart is empty</h3>
+        <p>Looks like you haven't added anything yet. Start shopping!</p>
+        <a href="index.html" class="btn-shop">🛍️ Browse Products</a>
+      </div>`;
+    return;
+  }
+
+  const subtotal = getSubtotal();
+  const savings = getSavings();
+  const delivery = getDelivery();
+  const total = getTotal();
+  const totalQty = cart.reduce((s,i)=>s+i.qty,0);
+
+  container.innerHTML = `
+    <div class="cart-layout">
+      <div>
+        <div class="cart-items">
+          <div class="cart-items-header">
+            <h2>🛒 Cart Items (${totalQty})</h2>
+            <button class="clear-btn" onclick="clearCart()">🗑️ Clear All</button>
+          </div>
+          ${cart.map(item=>`
+          <div class="cart-item">
+            <div class="item-emoji">${item.emoji}</div>
+            <div class="item-info">
+              <div class="item-cat">${item.cat}</div>
+              <div class="item-name">${item.name}</div>
+              <div class="item-brand">by ${item.brand || ''}</div>
+              <div class="item-unit-price">₹${item.price.toLocaleString()} each</div>
+            </div>
+            <div class="item-controls">
+              <button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button>
+              <span class="qty-val">${item.qty}</span>
+              <button class="qty-btn" onclick="changeQty(${item.id},1)">+</button>
+            </div>
+            <div class="item-price">₹${(item.price*item.qty).toLocaleString()}</div>
+            <button class="remove-btn" onclick="removeItem(${item.id})" title="Remove">✕</button>
+          </div>`).join('')}
+        </div>
+      </div>
+
+      <div class="order-summary">
+        <h2>Order Summary</h2>
+        <div class="summary-row"><span class="label">Subtotal (${totalQty} items)</span><span class="value">₹${subtotal.toLocaleString()}</span></div>
+        <div class="summary-row discount"><span class="label">You Save</span><span class="value">−₹${savings.toLocaleString()}</span></div>
+        <div class="summary-row"><span class="label">Delivery</span><span class="value">${delivery===0?'<span style="color:var(--success);font-weight:700;">FREE</span>':'₹'+delivery}</span></div>
+        ${delivery>0?`<div style="font-size:.75rem;color:var(--muted);margin-top:-6px;margin-bottom:10px;">Add ₹${(999-subtotal+1).toLocaleString()} more for free delivery</div>`:''}
+        <div class="coupon-box">
+          <input type="text" id="couponInput" placeholder="Coupon code (try SAVE10)">
+          <button class="coupon-apply" onclick="applyCoupon()">Apply</button>
+        </div>
+        <hr class="summary-divider">
+        <div class="summary-total">
+          <span class="label">Total Amount</span>
+          <span class="value">₹${total.toLocaleString()}</span>
+        </div>
+        <button class="checkout-btn" onclick="checkout()">🎉 Proceed to Checkout</button>
+        <a href="index.html"><button class="continue-btn">← Continue Shopping</button></a>
+        <div class="safe-pay">🔒 100% Secure Payments · UPI · Cards · Wallets</div>
+      </div>
+    </div>`;
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2800);
+}
+
+updateBadge(); render();
+</script>
+</body>
+</html>
