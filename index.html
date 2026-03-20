@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShopZone - Products</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #ff6b35;
+    --primary-dark: #e85520;
+    --secondary: #1a1a2e;
+    --accent: #ffd700;
+    --bg: #f7f7f7;
+    --white: #fff;
+    --text: #1a1a2e;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --success: #10b981;
+    --danger: #ef4444;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.14);
+    --r: 12px; --r-sm: 6px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);}
+  h1,h2,h3,h4{font-family:'Syne',sans-serif;}
+  a{text-decoration:none;color:inherit;}
+  button{cursor:pointer;border:none;font-family:inherit;}
+
+  /* NAV */
+  nav{background:var(--secondary);position:sticky;top:0;z-index:999;box-shadow:0 2px 16px rgba(0,0,0,0.3);}
+  .nav-inner{max-width:1300px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:64px;}
+  .logo{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:#fff;letter-spacing:-1px;}
+  .logo span{color:var(--primary);}
+  .nav-links{display:flex;gap:4px;}
+  .nav-links a{color:#ccc;font-size:.9rem;font-weight:600;padding:8px 14px;border-radius:var(--r-sm);transition:all .2s;}
+  .nav-links a:hover,.nav-links a.active{background:rgba(255,255,255,.1);color:#fff;}
+  .nav-links a.active{color:var(--primary);}
+  .nav-cart{position:relative;background:var(--primary);color:#fff;padding:8px 18px;border-radius:25px;font-weight:700;font-size:.9rem;display:flex;align-items:center;gap:6px;transition:all .2s;}
+  .nav-cart:hover{background:var(--primary-dark);transform:translateY(-1px);}
+  .cart-badge{background:var(--accent);color:var(--text);font-size:.72rem;font-weight:800;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;}
+
+  /* PAGE HEADER */
+  .page-header{background:linear-gradient(135deg,var(--secondary) 0%,#16213e 60%,#0f3460 100%);padding:48px 24px;text-align:center;}
+  .page-header h1{font-size:2.8rem;color:#fff;font-weight:800;margin-bottom:8px;}
+  .page-header h1 span{color:var(--primary);}
+  .page-header p{color:#aaa;font-size:1rem;max-width:500px;margin:0 auto 24px;}
+  .search-bar{display:flex;max-width:500px;margin:0 auto;background:#fff;border-radius:30px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.2);}
+  .search-bar input{flex:1;padding:12px 20px;border:none;outline:none;font-family:inherit;font-size:.95rem;}
+  .search-bar button{background:var(--primary);color:#fff;padding:12px 20px;font-weight:700;font-size:.9rem;}
+  .search-bar button:hover{background:var(--primary-dark);}
+
+  /* FILTER BAR */
+  .filter-bar{background:var(--white);border-bottom:1px solid var(--border);sticky:top:64px;}
+  .filter-inner{max-width:1300px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:10px;overflow-x:auto;}
+  .filter-inner::-webkit-scrollbar{display:none;}
+  .filter-btn{padding:8px 18px;border-radius:25px;font-size:.85rem;font-weight:600;border:2px solid var(--border);background:var(--white);color:var(--muted);transition:all .2s;white-space:nowrap;}
+  .filter-btn:hover,.filter-btn.active{border-color:var(--primary);background:var(--primary);color:#fff;}
+  .filter-label{font-size:.85rem;font-weight:700;color:var(--muted);white-space:nowrap;}
+  .sort-sel{padding:8px 14px;border-radius:var(--r-sm);border:2px solid var(--border);font-family:inherit;font-size:.85rem;font-weight:600;color:var(--text);background:var(--white);cursor:pointer;margin-left:auto;}
+
+  /* PRODUCTS GRID */
+  .main{max-width:1300px;margin:0 auto;padding:28px 24px;}
+  .results-info{font-size:.88rem;color:var(--muted);margin-bottom:20px;font-weight:500;}
+  .products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px;}
+
+  /* PRODUCT CARD */
+  .prod-card{background:var(--white);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);transition:all .25s;position:relative;}
+  .prod-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-4px);}
+  .prod-badge{position:absolute;top:10px;left:10px;z-index:2;font-size:.7rem;font-weight:800;padding:4px 10px;border-radius:20px;letter-spacing:.5px;text-transform:uppercase;}
+  .badge-sale{background:var(--danger);color:#fff;}
+  .badge-new{background:var(--success);color:#fff;}
+  .badge-hot{background:var(--accent);color:var(--text);}
+  .wish-btn{position:absolute;top:10px;right:10px;z-index:2;background:rgba(255,255,255,.9);border:none;border-radius:50%;width:34px;height:34px;font-size:1rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;box-shadow:0 2px 8px rgba(0,0,0,.12);}
+  .wish-btn:hover{transform:scale(1.15);}
+  .wish-btn.liked{color:var(--danger);}
+  .prod-img{height:200px;display:flex;align-items:center;justify-content:center;font-size:5.5rem;background:linear-gradient(135deg,#f8f9fa,#e9ecef);cursor:pointer;}
+  .prod-body{padding:16px;}
+  .prod-cat{font-size:.72rem;text-transform:uppercase;letter-spacing:1px;color:var(--primary);font-weight:700;margin-bottom:4px;}
+  .prod-name{font-size:.95rem;font-weight:700;line-height:1.35;margin-bottom:6px;cursor:pointer;transition:color .2s;}
+  .prod-name:hover{color:var(--primary);}
+  .prod-brand{font-size:.78rem;color:var(--muted);margin-bottom:8px;}
+  .stars{display:flex;align-items:center;gap:3px;margin-bottom:8px;}
+  .stars .s{color:#ffc107;font-size:.88rem;}
+  .stars .rv{font-size:.78rem;color:var(--muted);}
+  .prod-price{display:flex;align-items:baseline;gap:8px;margin-bottom:12px;}
+  .price-now{font-size:1.25rem;font-weight:800;font-family:'Syne',sans-serif;}
+  .price-old{font-size:.82rem;color:var(--muted);text-decoration:line-through;}
+  .price-pct{font-size:.78rem;color:var(--success);font-weight:700;}
+  .btn-cart{width:100%;background:var(--primary);color:#fff;font-weight:700;padding:10px;border-radius:var(--r-sm);font-size:.88rem;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px;}
+  .btn-cart:hover{background:var(--primary-dark);transform:translateY(-1px);}
+  .btn-cart.added{background:var(--success);}
+
+  /* EMPTY STATE */
+  .empty{text-align:center;padding:80px 20px;}
+  .empty .ei{font-size:5rem;margin-bottom:16px;}
+  .empty h3{font-size:1.4rem;margin-bottom:8px;}
+  .empty p{color:var(--muted);margin-bottom:20px;}
+
+  /* TOAST */
+  #toast{position:fixed;bottom:24px;right:24px;background:var(--secondary);color:#fff;padding:14px 22px;border-radius:var(--r);font-size:.9rem;font-weight:600;box-shadow:var(--shadow-lg);z-index:9999;transform:translateY(80px);opacity:0;transition:all .3s;border-left:4px solid var(--primary);}
+  #toast.show{transform:translateY(0);opacity:1;}
+
+  /* FOOTER */
+  footer{background:var(--secondary);color:#aaa;text-align:center;padding:24px;margin-top:40px;font-size:.85rem;}
+  footer strong{color:var(--primary);}
+
+  @media(max-width:700px){
+    .page-header h1{font-size:1.8rem;}
+    .products-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));}
+    .prod-img{height:140px;font-size:3.5rem;}
+    .nav-links a:not(.active){display:none;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo">Shop<span>Zone</span></div>
+    <div class="nav-links">
+      <a href="home.html">Home</a>
+      <a href="index.html" class="active">Products</a>
+      <a href="cart.html">Cart</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <a href="cart.html" class="nav-cart">🛒 Cart <span class="cart-badge" id="cartBadge">0</span></a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>Explore Our <span>Products</span></h1>
+  <p>Discover thousands of items across every category at unbeatable prices.</p>
+  <div class="search-bar">
+    <input type="text" id="searchQ" placeholder="Search products, brands...">
+    <button onclick="applySearch()">Search</button>
+  </div>
+</div>
+
+<div class="filter-bar">
+  <div class="filter-inner">
+    <span class="filter-label">Category:</span>
+    <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
+    <button class="filter-btn" onclick="setFilter('Electronics',this)">📱 Electronics</button>
+    <button class="filter-btn" onclick="setFilter('Fashion',this)">👗 Fashion</button>
+    <button class="filter-btn" onclick="setFilter('Home',this)">🏠 Home</button>
+    <button class="filter-btn" onclick="setFilter('Sports',this)">🏋️ Sports</button>
+    <button class="filter-btn" onclick="setFilter('Books',this)">📚 Books</button>
+    <button class="filter-btn" onclick="setFilter('Beauty',this)">💄 Beauty</button>
+    <select class="sort-sel" onchange="applySort(this.value)">
+      <option value="featured">Sort: Featured</option>
+      <option value="low">Price: Low to High</option>
+      <option value="high">Price: High to Low</option>
+      <option value="rating">Top Rated</option>
+    </select>
+  </div>
+</div>
+
+<div class="main">
+  <div class="results-info" id="resultsInfo">Showing all products</div>
+  <div class="products-grid" id="productsGrid"></div>
+</div>
+
+<footer><strong>ShopZone</strong> &copy; 2025 — All rights reserved.</footer>
+<div id="toast">✅ Added to cart!</div>
+
+<script>
+const PRODUCTS = [
+  {id:1,name:"Sony WH-1000XM5 Headphones",brand:"Sony",cat:"Electronics",emoji:"🎧",price:24999,original:34999,rating:4.8,reviews:3241,badge:"sale"},
+  {id:2,name:"Apple Watch Series 9",brand:"Apple",cat:"Electronics",emoji:"⌚",price:41999,original:45000,rating:4.9,reviews:1823,badge:"hot"},
+  {id:3,name:"Samsung 4K OLED TV 55\"",brand:"Samsung",cat:"Electronics",emoji:"📺",price:89999,original:120000,rating:4.7,reviews:987,badge:"sale"},
+  {id:4,name:"iPhone 16 Pro Max",brand:"Apple",cat:"Electronics",emoji:"📱",price:134900,original:144900,rating:4.9,reviews:5432,badge:"new"},
+  {id:5,name:"Men's Premium Cotton Shirt",brand:"Levi's",cat:"Fashion",emoji:"👔",price:1499,original:2499,rating:4.3,reviews:622},
+  {id:6,name:"Women's Floral Midi Dress",brand:"Zara",cat:"Fashion",emoji:"👗",price:2199,original:3499,rating:4.5,reviews:841,badge:"new"},
+  {id:7,name:"Running Shoes Pro X3",brand:"Nike",cat:"Sports",emoji:"👟",price:7499,original:9999,rating:4.6,reviews:1203,badge:"sale"},
+  {id:8,name:"Yoga Mat Premium 6mm",brand:"Decathlon",cat:"Sports",emoji:"🧘",price:899,original:1299,rating:4.4,reviews:534},
+  {id:9,name:"Non-Stick Cookware Set",brand:"Prestige",cat:"Home",emoji:"🍳",price:3499,original:5999,rating:4.5,reviews:729,badge:"sale"},
+  {id:10,name:"Memory Foam Pillow",brand:"SleepWell",cat:"Home",emoji:"🛏️",price:1199,original:1799,rating:4.3,reviews:445},
+  {id:11,name:"Atomic Habits - Book",brand:"James Clear",cat:"Books",emoji:"📗",price:399,original:699,rating:4.9,reviews:12840,badge:"hot"},
+  {id:12,name:"Rich Dad Poor Dad",brand:"Robert Kiyosaki",cat:"Books",emoji:"📘",price:299,original:499,rating:4.7,reviews:8930},
+  {id:13,name:"Vitamin C Serum 30ml",brand:"Minimalist",cat:"Beauty",emoji:"✨",price:599,original:999,rating:4.6,reviews:4210,badge:"new"},
+  {id:14,name:"Matte Lipstick Collection",brand:"MAC",cat:"Beauty",emoji:"💄",price:1299,original:1800,rating:4.4,reviews:2103},
+  {id:15,name:"boAt Bluetooth Speaker",brand:"boAt",cat:"Electronics",emoji:"🔊",price:2499,original:3999,rating:4.5,reviews:6781,badge:"sale"},
+  {id:16,name:"Canvas Tote Bag",brand:"H&M",cat:"Fashion",emoji:"👜",price:799,original:1299,rating:4.2,reviews:389},
+];
+
+let cart = JSON.parse(localStorage.getItem('sz_cart') || '[]');
+let currentFilter = 'all';
+let currentSort = 'featured';
+let searchQuery = '';
+
+function saveCart(){ localStorage.setItem('sz_cart', JSON.stringify(cart)); updateBadge(); }
+function updateBadge(){ document.getElementById('cartBadge').textContent = cart.reduce((s,i)=>s+i.qty,0); }
+
+function getFiltered(){
+  let list = [...PRODUCTS];
+  if(currentFilter !== 'all') list = list.filter(p=>p.cat===currentFilter);
+  if(searchQuery) list = list.filter(p=>p.name.toLowerCase().includes(searchQuery.toLowerCase())||p.brand.toLowerCase().includes(searchQuery.toLowerCase()));
+  if(currentSort==='low') list.sort((a,b)=>a.price-b.price);
+  else if(currentSort==='high') list.sort((a,b)=>b.price-a.price);
+  else if(currentSort==='rating') list.sort((a,b)=>b.rating-a.rating);
+  return list;
+}
+
+function stars(r){
+  let s='';for(let i=1;i<=5;i++)s+=`<span class="s">${i<=Math.floor(r)?'★':i-r<1?'★':'☆'}</span>`;
+  return s;
+}
+
+function render(){
+  const list = getFiltered();
+  const grid = document.getElementById('productsGrid');
+  document.getElementById('resultsInfo').textContent = `Showing ${list.length} product${list.length!==1?'s':''}`;
+  if(!list.length){
+    grid.innerHTML=`<div class="empty" style="grid-column:1/-1"><div class="ei">🔍</div><h3>No products found</h3><p>Try a different search or filter.</p></div>`;
+    return;
+  }
+  grid.innerHTML = list.map(p=>{
+    const disc = Math.round((1-p.price/p.original)*100);
+    const inCart = cart.find(c=>c.id===p.id);
+    return `
+    <div class="prod-card" id="card-${p.id}">
+      ${p.badge?`<span class="prod-badge badge-${p.badge}">${p.badge==='sale'?`-${disc}%`:p.badge}</span>`:''}
+      <button class="wish-btn" id="wish-${p.id}" onclick="toggleWish(${p.id})">🤍</button>
+      <div class="prod-img">${p.emoji}</div>
+      <div class="prod-body">
+        <div class="prod-cat">${p.cat}</div>
+        <div class="prod-name">${p.name}</div>
+        <div class="prod-brand">by ${p.brand}</div>
+        <div class="stars">${stars(p.rating)}<span class="rv">(${p.reviews.toLocaleString()})</span></div>
+        <div class="prod-price">
+          <span class="price-now">₹${p.price.toLocaleString()}</span>
+          <span class="price-old">₹${p.original.toLocaleString()}</span>
+          <span class="price-pct">${disc}% off</span>
+        </div>
+        <button class="btn-cart ${inCart?'added':''}" id="btn-${p.id}" onclick="addToCart(${p.id})">
+          ${inCart?'✅ Added':'🛒 Add to Cart'}
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function addToCart(id){
+  const p = PRODUCTS.find(x=>x.id===id);
+  const existing = cart.find(c=>c.id===id);
+  if(existing) existing.qty++;
+  else cart.push({...p, qty:1});
+  saveCart();
+  const btn = document.getElementById(`btn-${id}`);
+  btn.classList.add('added'); btn.textContent='✅ Added';
+  showToast(`${p.emoji} ${p.name.split(' ').slice(0,3).join(' ')} added to cart!`);
+}
+
+function toggleWish(id){
+  const btn = document.getElementById(`wish-${id}`);
+  btn.classList.toggle('liked');
+  btn.textContent = btn.classList.contains('liked') ? '❤️' : '🤍';
+}
+
+function setFilter(f, el){
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+
+function applySort(v){ currentSort=v; render(); }
+function applySearch(){ searchQuery=document.getElementById('searchQ').value; render(); }
+
+document.getElementById('searchQ').addEventListener('keydown',e=>{ if(e.key==='Enter') applySearch(); });
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2800);
+}
+
+updateBadge(); render();
+</script>
+</body>
+</html>
